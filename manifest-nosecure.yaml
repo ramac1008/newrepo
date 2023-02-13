@@ -46,7 +46,7 @@ spec:
     spec: # Pod spec
       containers:
       - name: noscontainer
-        image: condorl/local-py-app:1.0
+        image: gcr.io/rdrtest/alpnsecuresql:1.0
         ports:
         - containerPort: 8080
         envFrom:
