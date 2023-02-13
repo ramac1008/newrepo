@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlnosecure
+  namespace: argocd
+  labels:
+    app: nosecuresql
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    name: flask
+  selector:
+    app: nosecuresql
+    tier: frontend
+  type: LoadBalancer
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nosconfigmapv1.0
+  namespace: argocd
+data:
+  BG_COLOR: '#12181b'
+  FONT_COLOR: '#FFFFFF'
+  CUSTOM_HEADER: 'Customized with a configmap!'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nosdeployment
+  namespace: argocd
+  labels:
+    app: nosecuresql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nosecuresql
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: nosecuresql
+        tier: frontend
+    spec: # Pod spec
+      containers:
+      - name: noscontainer
+        image: condorl/local-py-app:1.0
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: nosconfigmapv1.0
+        resources:
+          requests:
+            memory: "16Mi"
+            cpu: "50m"    # 500milliCPUs (1/2 CPU)
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
