@@ -25,14 +25,6 @@ data:
   FONT_COLOR: '#FFFFFF'
   CUSTOM_HEADER: 'Customized with a configmap!'
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysecret
-type: Opaque
-data:
-  password: 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
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,23 +47,15 @@ spec:
       containers:
       - name: noscontainer
         image: ghcr.io/ramac1008/alpnsecuresql:1.0
-      env:
-      - name: MY_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: mysecret
-            key: password
-      ports:
+        ports:
         - containerPort: 8080
-      envFrom:
+        envFrom:
         - configMapRef:
-          name: nosconfigmapv1.0
-      resources:
-        requests:
-          memory: "16Mi"
-          cpu: "50m"    # 500milliCPUs (1/2 CPU)
-        limits:
-          memory: "128Mi"
-          cpu: "100m"
-
-
+            name: nosconfigmapv1.0
+        resources:
+          requests:
+            memory: "16Mi"
+            cpu: "50m"    # 500milliCPUs (1/2 CPU)
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
