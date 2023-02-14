@@ -46,7 +46,7 @@ spec:
     spec: # Pod spec
       containers:
       - name: noscontainer
-        image: gcr.io/rdrtest/alpnsecuresql:1.0
+        image: ghcr.io/ramac1008/alpnsecuresql:v1.0
         ports:
         - containerPort: 8080
         envFrom:
